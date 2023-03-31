@@ -13,8 +13,8 @@ public class SpringShoppingApplication {
 		SpringApplication.run(SpringShoppingApplication.class, args);
 	}
 
-	@GetMapping("/")
-	public String helloWorld() {
-		return "Hello World!";
-	}
+//	@GetMapping("/")
+//	public String helloWorld() {
+//		return "Hello World!";
+//	}
 }
