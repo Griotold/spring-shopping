@@ -6,6 +6,8 @@ import lombok.ToString;
 
 import javax.persistence.*;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @Table(name = "cart")
 @Getter @Setter
@@ -17,7 +19,7 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne
+    @OneToOne(fetch = LAZY)
     @JoinColumn(name="member_id")
     private Member member;
 }

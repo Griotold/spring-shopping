@@ -3,6 +3,7 @@ package com.example.entity;
 import com.example.constant.ItemSellStatus;
 import com.example.repository.ItemRepository;
 import com.example.repository.MemberRepository;
+import com.example.repository.OrderItemRepository;
 import com.example.repository.OrderRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -32,6 +33,9 @@ class OrderTest {
 
     @Autowired
     MemberRepository memberRepository;
+
+    @Autowired
+    OrderItemRepository orderItemRepository;
     @PersistenceContext
     EntityManager em;
 
@@ -103,6 +107,27 @@ class OrderTest {
         Order order = createOrder();
         order.getOrderItems().remove(0);
         em.flush();
+        // when
+
+        // then
+    }
+
+    @Test
+    @DisplayName("지연 로딩 테스트")
+    public void lazyLoadingTest() throws Exception {
+        // given
+        Order order = createOrder();
+        Long orderItemId = order.getOrderItems().get(0).getId();
+        em.flush();
+        em.clear();
+
+        OrderItem orderItem = orderItemRepository.findById(orderItemId)
+                .orElseThrow(EntityNotFoundException::new);
+        System.out.println("Order class : " + orderItem.getOrder().getClass());
+        System.out.println("================");
+        orderItem.getOrder().getOrderDate();
+        System.out.println("===============");
+
         // when
 
         // then
