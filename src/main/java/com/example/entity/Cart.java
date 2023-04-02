@@ -12,7 +12,7 @@ import static javax.persistence.FetchType.LAZY;
 @Table(name = "cart")
 @Getter @Setter
 @ToString
-public class Cart {
+public class Cart extends BaseEntity{
 
     @Id
     @Column(name = "cart_id")

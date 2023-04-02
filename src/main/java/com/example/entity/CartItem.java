@@ -10,7 +10,7 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @Getter @Setter
 @Table(name="cart_item")
-public class CartItem {
+public class CartItem extends BaseEntity{
 
     @Id
     @GeneratedValue
