@@ -50,6 +50,8 @@ dependencies {
 	implementation 'com.querydsl:querydsl-jpa'
 	implementation 'com.querydsl:querydsl-apt'
 
+	// modelMapper
+	implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.3.9'
 
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
