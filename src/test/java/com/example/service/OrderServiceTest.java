@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.constant.ItemSellStatus;
+import com.example.constant.OrderStatus;
 import com.example.dto.OrderDto;
 import com.example.entity.Item;
 import com.example.entity.Member;
@@ -77,5 +78,26 @@ class OrderServiceTest {
         int totalPrice = orderDto.getCount() * item.getPrice();
 
         assertThat(totalPrice).isEqualTo(order.getTotalPrice());
+    }
+
+    @Test
+    @DisplayName("주문 취소 테스트")
+    public void cancelOrder() {
+        Item item = saveItem();
+        Member member = saveMember();
+
+        OrderDto orderDto = new OrderDto();
+        orderDto.setCount(10);
+        orderDto.setItemId(item.getId());
+        Long orderId = orderService.order(orderDto, member.getEmail());
+
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(EntityNotFoundException::new);
+
+        // when
+        orderService.cancelOrder(orderId);
+
+        assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.CANCEL);
+        assertThat(item.getStockNumber()).isEqualTo(100);
     }
 }

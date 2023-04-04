@@ -60,4 +60,11 @@ public class Item extends BaseEntity{
         this.stockNumber = restStock;
     }
 
+    /**
+     * 주문 취소
+     */
+    public void addStock(int stockNumber) {
+        this.stockNumber += stockNumber;
+    }
+
 }
