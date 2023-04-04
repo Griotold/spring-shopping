@@ -3,6 +3,7 @@ package com.example.service;
 import com.example.dto.ItemFormDto;
 import com.example.dto.ItemImgDto;
 import com.example.dto.ItemSearchDto;
+import com.example.dto.MainItemDto;
 import com.example.entity.Item;
 import com.example.entity.ItemImg;
 import com.example.repository.ItemImgRepository;
@@ -65,7 +66,7 @@ public class ItemService {
         return itemFormDto;
     }
 
-    public Long updateItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws Exception{
+    public Long updateItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws Exception {
 
         // 상품 수정
         Item item = itemRepository.findById(itemFormDto.getId())
@@ -85,5 +86,11 @@ public class ItemService {
     @Transactional(readOnly = true)
     public Page<Item> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
         return itemRepository.getAdminItemPage(itemSearchDto, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto,
+                                             Pageable pageable) {
+        return itemRepository.getMainItemPage(itemSearchDto, pageable);
     }
 }

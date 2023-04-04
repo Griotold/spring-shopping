@@ -2,8 +2,11 @@ package com.example.repository;
 
 import com.example.constant.ItemSellStatus;
 import com.example.dto.ItemSearchDto;
+import com.example.dto.MainItemDto;
+import com.example.dto.QMainItemDto;
 import com.example.entity.Item;
 import com.example.entity.QItem;
+import com.example.entity.QItemImg;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -43,6 +46,41 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
         return new PageImpl<>(content, pageable, total);
 
     }
+
+    @Override
+    public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
+        QItem item = QItem.item;
+        QItemImg itemImg = QItemImg.itemImg;
+
+        QueryResults<MainItemDto> results = queryFactory
+                .select(
+                        new QMainItemDto(
+                                item.id,
+                                item.itemNm,
+                                item.itemDetail,
+                                itemImg.imgUrl,
+                                item.price
+                        )
+                )
+                .from(itemImg)
+                .join(itemImg.item, item)
+                .where(itemImg.repImgYn.eq("Y"))
+                .where(itemNmLike(itemSearchDto.getSearchQuery()))
+                .orderBy(item.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<MainItemDto> content = results.getResults();
+        long total = results.getTotal();
+        return new PageImpl<>(content, pageable, total);
+    }
+
+    private BooleanExpression itemNmLike(String searchQuery) {
+        return StringUtils.isEmpty(searchQuery) ?
+                null : QItem.item.itemNm.like("%" + searchQuery + "%");
+    }
+
 
     private BooleanExpression searchByLike(String searchBy, String searchQuery) {
         if (StringUtils.equals("itemNm", searchBy)) {
